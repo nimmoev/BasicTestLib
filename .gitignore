@@ -1,0 +1,8 @@
+# Executable files
+.out
+
+# Object files
+.o
+
+# Vscode project files
+.vscode
