@@ -7,13 +7,13 @@ UnitTestList::UnitTestList() {
     this->functionVector.clear();
 }
 
-UnitTestList::UnitTestList(std::vector<void (*)(UnitTestList *UTL)> functionVector) {
+UnitTestList::UnitTestList(std::vector<void (*)()> functionVector) {
     this->resultStr.clear();
     this->functionVector = functionVector;
 }
 
-// Append a test function to this UnitTestList's functionVector. Functions must have only an UnitTestList* as a parameter.
-void UnitTestList::AddTest(void (*function)(UnitTestList *UTL)) {
+// Append a test function to this UnitTestList's functionVector. Functions cannot have any parameters.
+void UnitTestList::AddTest(void (*function)()) {
     this->functionVector.push_back(function);
 }
 
@@ -21,7 +21,7 @@ void UnitTestList::AddTest(void (*function)(UnitTestList *UTL)) {
 void UnitTestList::RunTests() {
     int failedTests = 0;
     for (int i = 0; i < functionVector.size(); i++) {
-        this->functionVector.at(i)(this);
+        this->functionVector.at(i)();
         if (!this->resultStr.empty()) {
             std::cout << "ID:" << i << " " << resultStr << std::endl;
             this->resultStr.clear();
