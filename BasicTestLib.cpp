@@ -5,11 +5,13 @@
 UnitTestList::UnitTestList() { 
     this->resultStr.clear();
     this->functionVector.clear();
+    this->nameVector.clear();
 }
 
-UnitTestList::UnitTestList(std::vector<void (*)()> functionVector) {
+UnitTestList::UnitTestList(std::vector<void (*)()> functionVector, std::vector<std::string> nameVector) {
     this->resultStr.clear();
     this->functionVector = functionVector;
+    this->nameVector = nameVector;
 }
 
 // Append a test function to this UnitTestList's functionVector. Functions cannot have any parameters.
@@ -23,20 +25,26 @@ void UnitTestList::RunTests() {
     for (int i = 0; i < functionVector.size(); i++) {
         this->functionVector.at(i)();
         if (!this->resultStr.empty()) {
-            std::cout << "ID:" << i << " " << resultStr << std::endl;
-            this->resultStr.clear();
+            std::cout << nameVector.at(i) << ": " << resultStr << std::endl;
             failedTests++;
         }
     }
     std::cout << "--------------------" << std::endl;
     std::cout << "Ran " << functionVector.size() << " tests." << std::endl;
     std::cout << failedTests << " tests failed." << std::endl;
+    this->resultStr.clear();
 }
 
 // Produce error message during RunTests() when a != b
 void UnitTestList::AssertEqual(int a, int b) {
     if (a != b) {
         this->resultStr = "AssertEqual: " + std::to_string(a) + " != " + std::to_string(b);
+    }
+}
+
+void UnitTestList::AssertNotEqual(int a, int b) {
+    if (a == b) { 
+        this->resultStr = "AssertNotEqual: " + std::to_string(a) + " == " + std::to_string(b);
     }
 }
 

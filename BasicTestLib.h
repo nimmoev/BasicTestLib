@@ -11,13 +11,15 @@ class UnitTestList {
 protected:
     std::string resultStr;
     std::vector<void (*)()> functionVector;
+    std::vector<std::string> nameVector;
 
 public:
     UnitTestList();
-    UnitTestList(std::vector<void (*)()>);
+    UnitTestList(std::vector<void (*)()> functionVector, std::vector<std::string> nameVector);
     void AddTest(void (*function)());
     void RunTests();
     void AssertEqual(int a, int b);
+    void AssertNotEqual(int a, int b);
     void AssertTrue(bool param);
     void AssertFalse(bool param);
 
