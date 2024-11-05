@@ -16,7 +16,7 @@ protected:
 public:
     UnitTestList();
     UnitTestList(std::vector<void (*)()> functionVector, std::vector<std::string> nameVector);
-    void AddTest(void (*function)());
+    void AddTest(void (*function)(), std::string name);
     void RunTests();
     void AssertEqual(int a, int b);
     void AssertNotEqual(int a, int b);
