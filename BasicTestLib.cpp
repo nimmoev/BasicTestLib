@@ -2,38 +2,57 @@
 
 #include "BasicTestLib.h"
 
+UnitTest::UnitTest(void (*testPointer)(), std::string testName) {
+    this->testPointer = testPointer;
+    this->testName = testName;
+}
+
+// Return a string associated with this UnitTest
+std::string UnitTest::GetTestName() { 
+    return this->testName;
+}
+
+// Call the function pointer in this UnitTest
+void UnitTest::RunTest() {
+    this->testPointer();
+}
+
 UnitTestList::UnitTestList() { 
+    this->testListName.clear();
     this->resultStr.clear();
-    this->functionVector.clear();
-    this->nameVector.clear();
+    this->testVector.clear();
 }
 
-UnitTestList::UnitTestList(std::vector<void (*)()> functionVector, std::vector<std::string> nameVector) {
+UnitTestList::UnitTestList(std::string testListName, std::vector<void (*)()> functionVector, std::vector<std::string> nameVector) {
+    this->testListName = testListName;
     this->resultStr.clear();
-    this->functionVector = functionVector;
-    this->nameVector = nameVector;
+    for (int i = 0; i < functionVector.size(); i++) { 
+        this->AddTest(functionVector.at(i), nameVector.at(i));
+    }
 }
 
-// Append a test function to the UnitTestList. Functions cannot have any parameters.
+// Append a UnitTest to the UnitTestList. Functions cannot have any parameters.
 void UnitTestList::AddTest(void (*function)(), std::string name) {
-    this->functionVector.push_back(function);
-    this->nameVector.push_back(name);
+    this->testVector.push_back(UnitTest(function, name));
 }
 
 // Run the series of tests in in the UnitTestList.
 void UnitTestList::RunTests() {
     int failedTests = 0;
-    for (int i = 0; i < functionVector.size(); i++) {
-        this->functionVector.at(i)();
+    std::cout << "Running " << this->testListName << "." << std::endl;
+    std::cout << "------------------------" << std::endl;
+    for (int i = 0; i < testVector.size(); i++) {
+        this->testVector.at(i).RunTest();
         if (!this->resultStr.empty()) {
-            std::cout << nameVector.at(i) << ": " << resultStr << std::endl;
-            resultStr.clear();
+            std::cout << this->testVector.at(i).GetTestName() << ": " << resultStr << std::endl;
+            this->resultStr.clear();
             failedTests++;
         }
     }
-    std::cout << "--------------------" << std::endl;
-    std::cout << "Ran " << functionVector.size() << " tests." << std::endl;
-    std::cout << failedTests << " tests failed." << std::endl;
+    std::cout << "------------------------" << std::endl;
+    std::cout << this->testVector.size() << " tests completed." << std::endl;
+    std::cout << failedTests << " tests failed." << std::endl << std::endl;
+
     this->resultStr.clear();
 }
 
