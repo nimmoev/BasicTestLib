@@ -1,5 +1,3 @@
-#include <iostream>
-
 #include "BasicTestLib.h"
 
 UnitTest::UnitTest(void (*testPointer)(), std::string testName) {
