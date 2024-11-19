@@ -1,5 +1,7 @@
 #include "BasicTestLib.h"
 
+static std::string successStr = "S";
+
 UnitTest::UnitTest(void (*testPointer)(), std::string testName) {
     this->testPointer = testPointer;
     this->testName = testName;
@@ -40,44 +42,56 @@ void UnitTestList::RunTests() {
     std::cout << "Running " << this->testListName << "." << std::endl;
     std::cout << "------------------------" << std::endl;
     for (int i = 0; i < testVector.size(); i++) {
+        this->resultStr.clear();
         this->testVector.at(i).RunTest();
-        if (!this->resultStr.empty()) {
-            std::cout << this->testVector.at(i).GetTestName() << ": " << resultStr << std::endl;
-            this->resultStr.clear();
-            failedTests++;
+        if (resultStr.empty()) {
+            std::cout << this->testVector.at(i).GetTestName() << ": Assertion not called" << std::endl;
         }
+        else if (resultStr != successStr) {
+            std::cout << this->testVector.at(i).GetTestName() << ": " << resultStr << std::endl;                
+        }
+        else {
+            continue;
+        }
+        failedTests++;
     }
     std::cout << "------------------------" << std::endl;
     std::cout << this->testVector.size() << " tests completed." << std::endl;
     std::cout << failedTests << " tests failed." << std::endl << std::endl;
-
-    this->resultStr.clear();
 }
 
 // Produce error message during RunTests() when a != b.
 void UnitTestList::AssertEqual(int a, int b) {
-    if (a != b) {
-        this->resultStr = "AssertEqual: " + std::to_string(a) + " != " + std::to_string(b);
+    if (a == b) {
+        this->resultStr = successStr;
+        return;
     }
+    this->resultStr = "AssertEqual: " + std::to_string(a) + " != " + std::to_string(b);
 }
 
 // Produce error message during RunTests() when a == b.
 void UnitTestList::AssertNotEqual(int a, int b) {
-    if (a == b) { 
-        this->resultStr = "AssertNotEqual: " + std::to_string(a) + " == " + std::to_string(b);
+    if (a != b) { 
+        this->resultStr = successStr;
+        return;
     }
+    this->resultStr = "AssertNotEqual: " + std::to_string(a) + " == " + std::to_string(b);
 }
 
 // Produce error message during RunTests() when param != true.
 void UnitTestList::AssertTrue(bool param) {
-    if (!param) {
-        this->resultStr = "AssertTrue: " + std::to_string(param) + " != true";
+    if (param == true) {
+        this->resultStr = successStr;
+        return;
     }
+    this->resultStr = "AssertTrue: " + std::to_string(param) + " != true";
 }
 
 // Produce error message during RunTests() when param != false.
 void UnitTestList::AssertFalse(bool param) {
-    if (param) {
-        this->resultStr = "AssertFalse: " + std::to_string(param) + " != false";
+    if (param == false) {
+        this->resultStr = successStr;
+        return;
     }
+    this->resultStr = "AssertFalse: " + std::to_string(param) + " != false";
 }
