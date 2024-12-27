@@ -32,7 +32,9 @@ public:
     void AddTest(void (*function)(), std::string name);
     void RunTests();
     void AssertEqual(int a, int b);
+    void AssertEqual(std::vector<int> a, std::vector<int> b);
     void AssertNotEqual(int a, int b);
+    void AssertNotEqual(std::vector<int> a, std::vector<int> b);
     void AssertTrue(bool param);
     void AssertFalse(bool param);
 
