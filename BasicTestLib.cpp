@@ -61,6 +61,15 @@ void UnitTestList::RunTests() {
 }
 
 // Produce error message during RunTests() when a != b.
+void UnitTestList::AssertEqual(std::string a, std::string b) { 
+    if (a == b) {
+        this->resultStr = successStr;
+        return;
+    }
+    this->resultStr = "AssertEqual: " + a + " != " + b;
+}
+
+// Produce error message during RunTests() when a != b.
 void UnitTestList::AssertEqual(int a, int b) {
     if (a == b) {
         this->resultStr = successStr;
@@ -72,16 +81,25 @@ void UnitTestList::AssertEqual(int a, int b) {
 // Produce error message during RunTests() when a != b.
 void UnitTestList::AssertEqual(std::vector<int> a, std::vector<int> b) {
     if (a.size() != b.size()) { 
-        this->resultStr = "AssertEqual: vector a != vector b";
+        this->resultStr = "AssertEqual: " + GetIntVectorAsString(a) + " != " + GetIntVectorAsString(b);
         return;
     }
     for (int i = 0; i < a.size(); i++) { 
         if (a.at(i) != b.at(i)) { 
-            this->resultStr = "AssertEqual: vector a != vector b";
+            this->resultStr = "AssertEqual: " + GetIntVectorAsString(a) + " != " + GetIntVectorAsString(b);
             return;
         }
     }
     this->resultStr = successStr;
+}
+
+// Produce error message during RunTests() when a == b.
+void UnitTestList::AssertNotEqual(std::string a, std::string b) {
+    if (a != b) { 
+        this->resultStr = successStr;
+        return;
+    }
+    this->resultStr = "AssertNotEqual: " + a + " == " + b;
 }
 
 // Produce error message during RunTests() when a == b.
@@ -105,7 +123,7 @@ void UnitTestList::AssertNotEqual(std::vector<int> a, std::vector<int> b) {
             return;
         }
     }
-    this->resultStr = "AssertNotEqual: vector a == vector b";
+    this->resultStr = "AssertNotEqual: " + GetIntVectorAsString(a) + " == " + GetIntVectorAsString(b);
 }
 
 // Produce error message during RunTests() when param != true.
@@ -124,4 +142,29 @@ void UnitTestList::AssertFalse(bool param) {
         return;
     }
     this->resultStr = "AssertFalse: " + std::to_string(param) + " != false";
+}
+
+std::string GetStringVectorAsString(std::vector<std::string> strVector) { 
+    std::string result = "{";
+    if (strVector.empty()) { 
+        return "{}";
+    }
+    for (int i = 0; i < strVector.size() - 1; i++) { 
+        result += strVector.at(i) + ",";
+    }
+    result += strVector.at(strVector.size() - 1) + "}";
+    return result;
+}
+
+std::string GetIntVectorAsString(std::vector<int> intVector) {
+    std::string result = "{";
+    if (intVector.empty()) { 
+        return "{}";
+    }
+    for (int i = 0; i < intVector.size() - 1; i++) { 
+        result += std::to_string(intVector.at(i)) + ",";
+    }
+    result += std::to_string(intVector.at(intVector.size() - 1));
+    result += "}";
+    return result;
 }
