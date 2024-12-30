@@ -33,9 +33,11 @@ public:
     void RunTests();
     void AssertEqual(std::string a, std::string b);
     void AssertEqual(int a, int b);
+    void AssertEqual(std::vector<std::string> a, std::vector<std::string> b);
     void AssertEqual(std::vector<int> a, std::vector<int> b);
     void AssertNotEqual(std::string a, std::string b);
     void AssertNotEqual(int a, int b);
+    void AssertNotEqual(std::vector<std::string> a, std::vector<std::string> b);
     void AssertNotEqual(std::vector<int> a, std::vector<int> b);
     void AssertTrue(bool param);
     void AssertFalse(bool param);

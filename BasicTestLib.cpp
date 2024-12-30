@@ -79,6 +79,21 @@ void UnitTestList::AssertEqual(int a, int b) {
 }
 
 // Produce error message during RunTests() when a != b.
+void UnitTestList::AssertEqual(std::vector<std::string> a, std::vector<std::string> b) {
+    if (a.size() != b.size()) { 
+        this->resultStr = "AssertEqual: " + GetStringVectorAsString(a) + " != " + GetStringVectorAsString(b);
+        return;
+    }
+    for (int i = 0; i < a.size(); i++) { 
+        if (a.at(i) != b.at(i)) { 
+            this->resultStr = "AssertEqual: " + GetStringVectorAsString(a) + " != " + GetStringVectorAsString(b);
+            return;
+        }
+    }
+    this->resultStr = successStr;
+}
+
+// Produce error message during RunTests() when a != b.
 void UnitTestList::AssertEqual(std::vector<int> a, std::vector<int> b) {
     if (a.size() != b.size()) { 
         this->resultStr = "AssertEqual: " + GetIntVectorAsString(a) + " != " + GetIntVectorAsString(b);
@@ -109,6 +124,21 @@ void UnitTestList::AssertNotEqual(int a, int b) {
         return;
     }
     this->resultStr = "AssertNotEqual: " + std::to_string(a) + " == " + std::to_string(b);
+}
+
+// Produce error message during RunTests() when a != b.
+void UnitTestList::AssertNotEqual(std::vector<std::string> a, std::vector<std::string> b) {
+    if (a.size() != b.size()) { 
+        this->resultStr = successStr;
+        return;
+    }
+    for (int i = 0; i < a.size(); i++) { 
+        if (a.at(i) != b.at(i)) { 
+            this->resultStr = successStr;
+            return;
+        }
+    }
+    this->resultStr = "AssertNotEqual: " + GetStringVectorAsString(a) + " == " + GetStringVectorAsString(b);    
 }
 
 // Produce error message during RunTests() when a != b.
