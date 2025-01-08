@@ -1,6 +1,8 @@
 #include "BasicTestLib.h"
 
-static std::string successStr = "S";
+// Debug flag, set to true to see which tests run
+bool g_BTL_Debug = false;
+const std::string successStr = "S";
 
 UnitTest::UnitTest(void (*testPointer)(), std::string testName) {
     this->testPointer = testPointer;
@@ -23,6 +25,12 @@ UnitTestList::UnitTestList() {
     this->testVector.clear();
 }
 
+UnitTestList::UnitTestList(std::string testListName, std::vector<UnitTest> testVector) {
+    this->testListName = testListName;
+    this->resultStr.clear();
+    this->testVector = testVector;
+}
+
 UnitTestList::UnitTestList(std::string testListName, std::vector<void (*)()> functionVector, std::vector<std::string> nameVector) {
     this->testListName = testListName;
     this->resultStr.clear();
@@ -43,6 +51,9 @@ void UnitTestList::RunTests() {
     std::cout << "------------------------" << std::endl;
     for (int i = 0; i < testVector.size(); i++) {
         this->resultStr.clear();
+        if (g_BTL_Debug) { 
+            std::cout << this->testVector.at(i).GetTestName() << std::endl;
+        }
         this->testVector.at(i).RunTest();
         if (resultStr.empty()) {
             std::cout << this->testVector.at(i).GetTestName() << ": Assertion not called" << std::endl;
@@ -81,12 +92,12 @@ void UnitTestList::AssertEqual(int a, int b) {
 // Produce error message during RunTests() when a != b.
 void UnitTestList::AssertEqual(std::vector<std::string> a, std::vector<std::string> b) {
     if (a.size() != b.size()) { 
-        this->resultStr = "AssertEqual: " + GetStringVectorAsString(a) + " != " + GetStringVectorAsString(b);
+        this->resultStr = "AssertEqual: a.size() != b.size()";
         return;
     }
     for (int i = 0; i < a.size(); i++) { 
         if (a.at(i) != b.at(i)) { 
-            this->resultStr = "AssertEqual: " + GetStringVectorAsString(a) + " != " + GetStringVectorAsString(b);
+            this->resultStr = "AssertEqual: a[" + std::to_string(i) + "] != b[" + std::to_string(i) + "]: " + a.at(i) + " != " + b.at(i);
             return;
         }
     }
@@ -174,6 +185,7 @@ void UnitTestList::AssertFalse(bool param) {
     this->resultStr = "AssertFalse: " + std::to_string(param) + " != false";
 }
 
+// Parse strVector into a single string result.
 std::string GetStringVectorAsString(std::vector<std::string> strVector) { 
     std::string result = "{";
     if (strVector.empty()) { 
@@ -186,6 +198,7 @@ std::string GetStringVectorAsString(std::vector<std::string> strVector) {
     return result;
 }
 
+// Parse intVector into a single string result.
 std::string GetIntVectorAsString(std::vector<int> intVector) {
     std::string result = "{";
     if (intVector.empty()) { 

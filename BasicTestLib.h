@@ -1,9 +1,15 @@
+#ifndef BTL_H
+#define BTL_H
+
 #include <iostream>
 #include <string>
 #include <vector>
 
-#ifndef BTL_H
-#define BTL_H
+extern bool g_BTL_Debug;
+extern const std::string successStr;
+
+class UnitTest;
+class UnitTestList;
 
 /// @brief A class which offers the ability to run a test function. Also contains an associated name string
 class UnitTest {
@@ -28,6 +34,7 @@ protected:
 
 public:
     UnitTestList();
+    UnitTestList(std::string testListName, std::vector<UnitTest> testVector);
     UnitTestList(std::string testListName, std::vector<void (*)()> functionVector, std::vector<std::string> nameVector);
     void AddTest(void (*function)(), std::string name);
     void RunTests();

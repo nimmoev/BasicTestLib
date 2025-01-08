@@ -10,13 +10,11 @@ The current functionality includes:
 It is not recommended to instantiate your own objects of class UnitTest.
 
 To implement this UnitTestList class, follow these instructions:
- 1. Declare an extern TestFunctionVector (std::vector<void (*)()>) in your header file.
- 2. Declare an extern TestNameVector (std::vector<std::string >) in your header file.
- 3. Declare an extern UnitTestList in your header file.
- 4. Declare your test functions of type void (with no parameters) in header file.
- 5. Instantiate TestFunctionVector with references to your test functions in your source file.
- 6. Instantiate TestNameVector with a std::string of same name of each of your test functions in your source file.
- 7. Define all of your test functions in your source file.
-   - Each test function requires a use of an assert from UnitTestList. 
-
-It is recommended to implement new UnitTestLists for new features rather than adding to existing UnitTestLists.
+ 1. Declare a const extern std::vector<UnitTest> in your header file.
+ 2. Declare an UnitTestList in your header file.
+ 3. Declare your test functions of type void (with no parameters) in your header file.
+ 4. Instantiate the const std::vector<UnitTest> with UnitTests in your source file.
+    - To Instantiate a UnitTest, pass in a void pointer to your test function and a test name (std::string).
+ 5. Instantiate UnitTestList with a TestListName and the previous const std::vector<UnitTest> in your source file.
+ 6. Define all of your test functions in your source file.
+    - Each test function requires a use of an assert from UnitTestList. 
